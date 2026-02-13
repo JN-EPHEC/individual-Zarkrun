@@ -1,5 +1,16 @@
 import express from 'express';
-import userRoutes from "./routes/userRoutes.ts"
+import userRoutes from "./routes/userRoutes.ts";
+import sequelize from "./config/database.ts";
+import User from './models/Users.ts'
+
+try {
+    await sequelize.sync({ force: true });
+    console.log('All models were synchronized successfully.');
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+} catch (error) {
+    console.error('Unable to connect to the database:', error);
+}
 
 const app = express();
 const port = 3000;
@@ -21,6 +32,12 @@ app.get('/api/hello/:name', (request, response) => {
 
 app.use('/api/users', userRoutes);
 
+
 app.listen(port, () => {
-    //console.log(etudiants);
-})
+    console.log('http://localhost:3000');
+    });
+
+
+
+
+
