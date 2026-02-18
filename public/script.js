@@ -18,7 +18,7 @@ async function loadUsers(list) {
             li.className = "list-group-item d-flex justify-content-between align-items-center";
 
             const span = document.createElement('span');
-            span.textContent = `${user.firstName} ${user.lastName}`;
+            span.textContent = `${user.firstName} ${user.lastName} ${user.id}`;
 
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = "X";
@@ -41,12 +41,16 @@ async function loadUsers(list) {
 async function postUsers(list){
     const firstName = document.getElementById("firstName").value;
     const lastName = document.getElementById("lastName").value;
+    const id = document.getElementById("matricule").value;
+
     try {
         const res = await fetch('http://localhost:3000/api/users',
-            {method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({firstName, lastName}),
+            {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id, firstName, lastName }),
             });
+
         if (res.ok) {
             await res.json();
             loadUsers(list);
@@ -55,6 +59,7 @@ async function postUsers(list){
         console.error("Erreur du post : ", err);
     }
 }
+
 
 async function deleteUser(id, list) {
     try {
@@ -68,5 +73,22 @@ async function deleteUser(id, list) {
 
     } catch (err) {
         console.error("Erreur lors de la suppression :", err);
+    }
+}
+
+async function updateUser(id, firstName, lastName, list) {
+    try {
+        const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ firstName, lastName })
+        });
+
+        if (res.ok) {
+            loadUsers(list);
+        }
+
+    } catch (err) {
+        console.error("Erreur lors de la mise à jour :", err);
     }
 }

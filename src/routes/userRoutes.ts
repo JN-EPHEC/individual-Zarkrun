@@ -10,23 +10,29 @@ router.get('/', async (req, res) => {
     res.json(users)
 });
 
-
 router.post('/', async (req, res) => {
     try {
-        const { firstName, lastName } = req.body; // récupère les données envoyées
+        const { id, firstName, lastName } = req.body;
 
-        // Validation simple
-        if (!firstName || !lastName) {
-            return res.status(400).json({ error: "Prénom et nom sont requis" });
+        if (!id || !firstName || !lastName) {
+            return res.status(400).json({ error: "Id, prénom et nom sont requis" });
+        }
+
+        const existingUser = await User.findByPk(id);
+
+        if (existingUser) {
+            await existingUser.update({ firstName, lastName });
+            return res.json({ message: "Utilisateur mis à jour", data: existingUser });
         }
 
         const newUser = await User.create({
+            id,
             firstName,
             lastName
         });
 
-        console.log("Created:", newUser.toJSON());
-        res.status(201).json(newUser);
+        res.status(201).json({ message: "Utilisateur créé", data: newUser });
+
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }

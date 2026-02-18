@@ -9,8 +9,6 @@ On se connecte a la db puis on recrer toute la table de zéros
 try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-    await sequelize.sync();
-    console.log('All models were synchronized successfully.');
 } catch (error) {
     console.error('Unable to connect to the database:', error);
 }
