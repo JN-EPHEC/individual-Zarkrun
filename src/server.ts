@@ -4,6 +4,7 @@ import sequelize from "./config/database.ts";
 import { errorHandler } from "./middlewares/errorHandler";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
+import cors from 'cors';
 
 /*
 On se connecte a la db puis on recrer toute la table de zéros
@@ -21,6 +22,7 @@ const port = 3000;
 
 /* */
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(cors()); // DEV UNIQUEMENT!!
 app.use(express.static('public'))
 app.use(express.json());
 app.use('/api/users', userRoutes);
