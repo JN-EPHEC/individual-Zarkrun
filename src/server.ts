@@ -2,6 +2,8 @@ import express from 'express';
 import userRoutes from "./routes/userRoutes.ts";
 import sequelize from "./config/database.ts";
 import { errorHandler } from "./middlewares/errorHandler";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
 
 /*
 On se connecte a la db puis on recrer toute la table de zéros
@@ -18,6 +20,7 @@ const app = express();
 const port = 3000;
 
 /* */
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.static('public'))
 app.use(express.json());
 app.use('/api/users', userRoutes);
