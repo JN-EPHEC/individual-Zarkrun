@@ -52,7 +52,7 @@ export const deleteUsers = async (req : Request, res : Response, next : NextFunc
             return next(error);
         }
 
-        await user.destroy();
+        await user  .destroy();
 
         return res.status(200).json({ message: "Utilisateur supprimé" });
 
