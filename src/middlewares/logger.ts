@@ -1,7 +1,16 @@
-import type { Request, Response, NextFunction } from 'express';
-export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next(); // Indispensable pour passer à la suite !
-};
+import winston from "winston";
 
-export default requestLogger;
+export const logger = winston.createLogger({
+    level: "error",
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.errors({ stack: true }),
+        winston.format.json()
+    ),
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: "logs/error.log", level: "error" })
+    ],
+});
+
+export default logger;

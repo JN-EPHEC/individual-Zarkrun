@@ -1,7 +1,7 @@
 import express from 'express';
 import userRoutes from "./routes/userRoutes.ts";
 import sequelize from "./config/database.ts";
-import requestLogger from "./middlewares/logger.ts"
+import { errorHandler } from "./middlewares/errorHandler";
 
 /*
 On se connecte a la db puis on recrer toute la table de zéros
@@ -18,10 +18,17 @@ const app = express();
 const port = 3000;
 
 /* */
-app.use(requestLogger);
 app.use(express.static('public'))
 app.use(express.json());
 app.use('/api/users', userRoutes);
+app.get("/test-error", (req, res, next) => {
+    const error = new Error("Erreur de test");
+    (error as any).status = 400;
+    next(error);
+});
+
+app.use(errorHandler);
+
 
 
 app.listen(port, () => {

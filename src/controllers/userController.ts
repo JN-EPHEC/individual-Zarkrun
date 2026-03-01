@@ -1,21 +1,23 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction} from "express";
 import User from "../models/Users.ts";
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await User.findAll();
         res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ error: (error as any).message });
+        next(error)
     }
 };
 
-export const postNewUsers = async (req: Request, res: Response) => {
+export const postNewUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id, firstName, lastName } = req.body;
 
         if (!id || !firstName || !lastName) {
-            return res.status(400).json({ error: "Id, prénom et nom sont requis" });
+            const error = new Error("Id, prénom et nom sont requis");
+            (error as any).status = 400;
+            return next(error);
         }
 
         const existingUser = await User.findByPk(id);
@@ -34,18 +36,20 @@ export const postNewUsers = async (req: Request, res: Response) => {
         res.status(201).json({ message: "Utilisateur créé", data: newUser });
 
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        next(error)
     }
 };
 
-export const deleteUsers = async (req, res) => {
+export const deleteUsers = async (req : Request, res : Response, next : NextFunction) => {
     try {
         const { id } = req.params;
 
         const user = await User.findByPk(id);
 
         if (!user) {
-            return res.status(404).json({ message: "Utilisateur inexistant" });
+            const error = new Error("Utilisateur inexistant");
+            (error as any).status = 404;
+            return next(error);
         }
 
         await user.destroy();
@@ -53,8 +57,7 @@ export const deleteUsers = async (req, res) => {
         return res.status(200).json({ message: "Utilisateur supprimé" });
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Erreur serveur" });
+       next(error)
     }
 };
 
