@@ -15,6 +15,7 @@ const router = express.Router();
  *       200:
  *         description: Succès
  */
+
 router.get("/", userController.getAllUsers);
 
 router.post("/", userController.postNewUsers);
