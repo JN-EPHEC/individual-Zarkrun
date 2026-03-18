@@ -1,4 +1,5 @@
 import { validatePassword } from "../utils/password";
+import { describe, test, expect, it } from "@jest/globals";
 describe("Password Validator - White Box Testing", () => {
 // Test initial pour initialiser le rapport de couverture
 // Ce test ne couvre que la première ligne de la fonction (Branch 1)

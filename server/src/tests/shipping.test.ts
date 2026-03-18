@@ -1,4 +1,5 @@
 import { calculateShipping } from "../utils/shipping.ts"
+import { describe, test, expect } from "@jest/globals";
 
 // [distance, weight, type, expected, description]
 
@@ -47,7 +48,7 @@ describe("Shipping Calculator - Tests Fonctionnels", () => {
         }
     );
     
-    test.each(pairwiseCases)(
+    test.each(pairwiseCases)(   
         "%s",
         (distance, weight, type, expected) => {
             expect(calculateShipping(distance, weight, type)).toBe(expected);
