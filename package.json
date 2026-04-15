@@ -248,7 +248,6 @@
     "toidentifier": "^1.0.1",
     "toposort-class": "^1.0.1",
     "triple-beam": "^1.4.1",
-    "ts-node": "^10.9.2",
     "tunnel-agent": "^0.6.0",
     "type-is": "^2.0.1",
     "umzug": "^2.3.0",
@@ -279,17 +278,17 @@
     "z-schema": "^5.0.5"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "concurrently": "x.y.z",
+    "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "//": "Installe les dépendances des deux projets",
+    "//": "Lance les deux en parallèle",
     "setup": "npm install --prefix server && npm install --prefix client",
-    "//": "Raccourcis vers les commandes des sous-dossiers",
     "start:server": "npm run dev --prefix server",
     "start:client": "npm run dev --prefix client",
-    "//": "Lance les deux en parallèle",
     "dev": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
   "repository": {
