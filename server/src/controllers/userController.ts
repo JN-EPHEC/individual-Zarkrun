@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction} from "express";
-import User from "../models/Users.ts";
+import User from "../models/Users.js";
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -20,7 +20,15 @@ export const postNewUsers = async (req: Request, res: Response, next: NextFuncti
             return next(error);
         }
 
-        const existingUser = await User.findByPk(id);
+        const userId = Number(id);
+
+        if (isNaN(userId)) {
+            const error = new Error("ID invalide");
+            (error as any).status = 400;
+            return next(error);
+        }
+
+        const existingUser = await User.findByPk(userId);
 
         if (existingUser) {
             await existingUser.update({ firstName, lastName });
@@ -28,21 +36,27 @@ export const postNewUsers = async (req: Request, res: Response, next: NextFuncti
         }
 
         const newUser = await User.create({
-            id,
+            id: userId,
             firstName,
             lastName
         });
 
         res.status(201).json({ message: "Utilisateur créé", data: newUser });
 
-    } catch (error: any) {
-        next(error)
+    } catch (error) {
+        next(error);
     }
 };
 
-export const deleteUsers = async (req : Request, res : Response, next : NextFunction) => {
+export const deleteUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params;
+        const id = Number(req.params.id);
+
+        if (isNaN(id)) {
+            const error = new Error("ID invalide");
+            (error as any).status = 400;
+            return next(error);
+        }
 
         const user = await User.findByPk(id);
 
@@ -52,12 +66,12 @@ export const deleteUsers = async (req : Request, res : Response, next : NextFunc
             return next(error);
         }
 
-        await user  .destroy();
+        await user.destroy();
 
         return res.status(200).json({ message: "Utilisateur supprimé" });
 
     } catch (error) {
-       next(error)
+        next(error);
     }
 };
 

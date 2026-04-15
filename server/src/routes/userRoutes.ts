@@ -1,9 +1,6 @@
-import express from 'express';
-import * as userController from "../controllers/userController";
-import { checkIdParam } from "../middlewares/checkIdParam";
-
-
-const router = express.Router();
+import express from "express";
+import * as userController from "../controllers/userController.js";
+import { checkIdParam } from "../middlewares/checkIdParam.js";
 
 /**
  * @swagger
@@ -16,10 +13,10 @@ const router = express.Router();
  *         description: Succès
  */
 
+const router = express.Router();
+
 router.get("/", userController.getAllUsers);
-
 router.post("/", userController.postNewUsers);
-
 router.delete("/:id", checkIdParam, userController.deleteUsers);
 
-module.exports = router;
+export default router; // ✅ correct pour TypeScript/ESM

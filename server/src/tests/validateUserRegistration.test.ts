@@ -1,9 +1,10 @@
-import { validateUserRegistration } from "../utils/validateUserRegistration.ts";
+import { validateUserRegistration } from "../utils/validateUserRegistration.js";
 import { describe, test, expect } from "@jest/globals";
 
-describe("White Box Testing", () => {
+type UserRole = "user" | "admin" | "stagiaire";
 
-    const validCases: Array<[number, string, string, boolean, string]> = [
+describe("White Box Testing", () => {
+    const validCases: Array<[number, UserRole, string, boolean, string]> = [
         [25, "user", "a@b.c", true, "Âge adulte, rôle user, email valide"],
         [17, "stagiaire", "a@b.c", true, "Mineur mais stagiaire, email valide"],
         [17, "user", "a@b.c", false, "Mineur non stagiaire, email valide"],
@@ -18,23 +19,23 @@ describe("White Box Testing", () => {
 
     test.each(validCases)(
         "%s",
-        (age, role, email, expected, description) => {
+        (age, role, email, expected) => {
             expect(validateUserRegistration(age, role, email)).toBe(expected);
         }
     );
 
-    const invalidCases: Array<[any, string, string, string]> = [
-        [121, "user", "a@b.c", "Erreur âge"],       // âge > 120
-        [121, "stagiaire", "a@b.c", "Erreur âge"],  // âge > 120
-        ["trente", "user", "a@b.c", "Erreur âge"],  // âge type incorrect
-        [null, "user", "a@b.c", "Erreur âge"],      // âge null
-        [25, "guest", "a@b.c", "Erreur rôle"],      // rôle invalide
-        [18, "guest", "a@b.c", "Erreur rôle"]       // rôle invalide
+    const invalidCases: Array<[any, any, string, string]> = [
+        [121, "user", "a@b.c", "Erreur âge"],
+        [121, "stagiaire", "a@b.c", "Erreur âge"],
+        ["trente", "user", "a@b.c", "Erreur âge"],
+        [null, "user", "a@b.c", "Erreur âge"],
+        [25, "guest", "a@b.c", "Erreur rôle"],
+        [18, "guest", "a@b.c", "Erreur rôle"]
     ];
 
     test.each(invalidCases)(
         "%s",
-        (age, role, email, description) => {
+        (age, role, email) => {
             expect(() => validateUserRegistration(age, role, email)).toThrow();
         }
     );

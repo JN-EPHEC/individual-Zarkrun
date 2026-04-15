@@ -1,10 +1,10 @@
-import { calculateShipping } from "../utils/shipping.ts"
+import { calculateShipping } from "../utils/shipping.js";
 import { describe, test, expect } from "@jest/globals";
 
+type ShippingType = "standard" | "express";
+
 // [distance, weight, type, expected, description]
-
-const validCases = [
-
+const validCases: Array<[number, number, ShippingType, number, string]> = [
     [0, 5, "standard", 10, "Distance 0 km -> Base 10€"],
     [50, 5, "standard", 10, "Distance 50 km -> Base 10€"],
     [51, 5, "standard", 25, "Distance 51 km -> Base 25€"],
@@ -16,14 +16,14 @@ const validCases = [
     [10, 50, "standard", 15, "Poids 50kg -> +50%"],
 ];
 
-const invalidCases = [
+const invalidCases: Array<[number, number, ShippingType, string]> = [
     [-1, 5, "standard", "Invalid distance"],
     [10, 0, "standard", "Invalid weight"],
     [10, -5, "standard", "Invalid weight"],
     [10, 51, "standard", "Invalid weight"],
 ];
 
-const pairwiseCases = [
+const pairwiseCases: Array<[number, number, ShippingType, number, string]> = [
     [10, 5, "standard", 10, "D1 W1 T1"],
     [10, 20, "express", 30, "D1 W2 T2"],
     [100, 5, "express", 50, "D2 W1 T2"],
@@ -33,7 +33,6 @@ const pairwiseCases = [
 ];
 
 describe("Shipping Calculator - Tests Fonctionnels", () => {
-
     test.each(validCases)(
         "%s",
         (distance, weight, type, expected) => {
@@ -47,12 +46,11 @@ describe("Shipping Calculator - Tests Fonctionnels", () => {
             expect(() => calculateShipping(distance, weight, type)).toThrow();
         }
     );
-    
-    test.each(pairwiseCases)(   
+
+    test.each(pairwiseCases)(
         "%s",
         (distance, weight, type, expected) => {
             expect(calculateShipping(distance, weight, type)).toBe(expected);
         }
     );
-
 });

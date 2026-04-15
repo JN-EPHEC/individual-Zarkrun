@@ -2,3 +2,5 @@ node_modules
 server/node_modules
 server/database.sqlite
 server/logs
+server/.env
+server/config/config.json
