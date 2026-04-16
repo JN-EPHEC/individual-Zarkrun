@@ -1,6 +1,6 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
-import sequelize from "./config/database.js";
+import Database from "./config/database.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.js";
@@ -8,6 +8,7 @@ import cors from "cors";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
+const sequelize = Database.getInstance();
 
 (async () => {
     try {

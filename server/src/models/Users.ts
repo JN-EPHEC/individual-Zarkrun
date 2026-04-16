@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database.js";
+import Database from "../config/database.js";
+
+const sequelize = Database.getInstance();
 
 class User extends Model {}
 

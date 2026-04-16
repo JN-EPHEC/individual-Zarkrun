@@ -1,6 +1,7 @@
 import express from "express";
 import * as userController from "../controllers/userController.js";
 import { checkIdParam } from "../middlewares/checkIdParam.js";
+import { basicAuth } from "../middlewares/basicAuth.js";
 
 /**
  * @swagger
@@ -19,4 +20,22 @@ router.get("/", userController.getAllUsers);
 router.post("/", userController.postNewUsers);
 router.delete("/:id", checkIdParam, userController.deleteUsers);
 
-export default router; // ✅ correct pour TypeScript/ESM
+/**
+ * @swagger
+ * /api/users/admin/basic:
+ *   get:
+ *     summary: Route protégée Basic Auth
+ *     tags: [Admin]
+ *     security:
+ *       - basicAuth: []
+ *     responses:
+ *       200:
+ *         description: Succès
+ *       401:
+ *         description: Non autorisé
+ */
+router.get("/admin/basic", basicAuth, (req, res) => {
+    res.json({ message: "Accès autorisé (Basic Auth)" });
+});
+
+export default router;
