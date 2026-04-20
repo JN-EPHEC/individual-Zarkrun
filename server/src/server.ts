@@ -1,9 +1,11 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import Database from "./config/database.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.js";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
@@ -20,8 +22,10 @@ const sequelize = Database.getInstance();
 
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     app.use(cors());
+    app.use(cookieParser());
     app.use(express.static("public"));
     app.use(express.json());
+    app.use("/api/auth", authRoutes);
     app.use("/api/users", userRoutes);
     app.get("/test-error", (req, res, next) => {
         const error = new Error("Erreur de test");

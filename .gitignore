@@ -4,3 +4,6 @@ server/database.sqlite
 server/logs
 server/.env
 server/config/config.json
+postman
+.postman
+server/dist
