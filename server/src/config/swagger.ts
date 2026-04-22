@@ -13,6 +13,11 @@ const swaggerOptions = {
                     type: "http",
                     scheme: "basic",
                 },
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
             },
         },
     },

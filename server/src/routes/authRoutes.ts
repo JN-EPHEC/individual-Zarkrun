@@ -33,6 +33,31 @@ const createRefreshToken = () => {
     );
 };
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Connexion utilisateur
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: student
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Token JWT généré
+ *       401:
+ *         description: Identifiants invalides
+ */
 
 router.post("/login", (req, res) => {
     const { username, password } = req.body;
@@ -56,6 +81,21 @@ router.post("/login", (req, res) => {
 
     return res.json({ accessToken });
 });
+
+/**
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Rafraîchir le token JWT
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Nouveau access token généré
+ *       401:
+ *         description: Refresh token manquant
+ *       403:
+ *         description: Refresh token invalide ou expiré
+ */
 
 router.post("/refresh", (req, res) => {
     try {
